@@ -1,0 +1,39 @@
+expr                : VAR IDENTIFIER EQ expr
+                   | comp-expr ((KEYWORD:AND | KEYWORD:OR) comp-expr)*
+
+comp-expr          : NOT comp-expr
+                   | arith-expr ((EE | LT | GT | LTE | GTE) arith-expr)*
+
+arith-expr         : term ((PLUS | MINUS) term)*
+
+term               : factor ((MUL | DIV) factor)*
+
+factor             : (PLUS | MINUS) factor
+                   | power
+
+power              : atom (POW factor)*
+
+call               : atom (LPAREN (expr (COMMA expr)*)? RPAREN)?
+
+atom               : INT | FLOAT | IDENTIFIER | STRING
+                   | LPAREN expr RPAREN
+                   | if_statement
+                   | while_statement
+                   | func-def
+
+if-expr            : KEYWORD:if LPAREN expr RPAREN COLON block (KEYWORD:else COLON block)?
+
+while-expr         : KEYWORD:while LPAREN expr RPAREN COLON block
+
+block              : (expr | if-expr | while-expr)*
+
+func-def           : KEYWORD: def IDENTIFIER?
+                   : LPAREN (IDENTIFIER (COMMA IDENTIFIER)* )? RPAREN
+                   : ARROW expr
+
+
+for i in range(0, 11) : result *= i
+
+for i in range(0, 11, 2) : result *= i
+
+while <condition> : <expr>
